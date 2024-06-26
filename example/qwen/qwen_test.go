@@ -58,6 +58,7 @@ LOOP:
 			break LOOP
 		}
 		fmt.Println(r.Output.Text)
+
 	}
 	// for info := range resp {
 	// 	fmt.Printf("收到的回复：%v\n", info.Output.Text)
