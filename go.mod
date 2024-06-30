@@ -29,4 +29,5 @@ require (
 	github.com/baidubce/bce-sdk-go v0.9.184
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/spf13/viper v1.19.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.952
 )
