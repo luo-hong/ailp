@@ -1,7 +1,6 @@
 package qwen
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -9,7 +8,9 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/alevinval/sse/pkg/base"
+	"github.com/alevinval/sse/pkg/decoder"
 )
 
 type QWenChat struct {
@@ -87,11 +88,11 @@ func (c *QWenChat) GetAIReply(messages []Messages) (Response, error) {
 }
 
 // GetAIReplyStream 获取聊天回复
-func (c *QWenChat) GetAIReplyStream(messages []Messages) (<-chan Response, error) {
+func (c *QWenChat) GetAIReplyStream(messages []Messages, fn func(e *base.MessageEvent) error) error {
 	client := http.Client{}
 
 	if !checkParams(c) {
-		return nil, fmt.Errorf("invalid parameters")
+		return fmt.Errorf("invalid parameters")
 	}
 
 	// Prepare request body
@@ -102,13 +103,13 @@ func (c *QWenChat) GetAIReplyStream(messages []Messages) (<-chan Response, error
 	}
 	jsonBody, err := json.Marshal(body)
 	if err != nil {
-		return nil, fmt.Errorf("json marshal failed: %w", err)
+		return fmt.Errorf("json marshal failed: %w", err)
 	}
 
 	// Create request
 	req, err := http.NewRequest("POST", c.BaseUrl, bytes.NewReader(jsonBody))
 	if err != nil {
-		return nil, fmt.Errorf("new request failed: %w", err)
+		return fmt.Errorf("new request failed: %w", err)
 	}
 
 	// Set headers
@@ -119,56 +120,30 @@ func (c *QWenChat) GetAIReplyStream(messages []Messages) (<-chan Response, error
 	// Perform the request
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("request failed: %w", err)
 	}
-
+	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		var errResp ResponseError
-		b, _ := io.ReadAll(resp.Body)
-		err = json.Unmarshal(b, &errResp)
-		if err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("failed,err:%v,code:%s,message:%s", err, errResp.Code, errResp.Message)
+		return fmt.Errorf("code:%d", resp.StatusCode)
 	}
-
-	// Handle streaming response
-	messageChan := make(chan Response)
-	go func() {
-		info := ""
-		defer resp.Body.Close()
-		reader := bufio.NewReader(resp.Body)
-		for {
-			line, err := reader.ReadString('\n')
-			if err != nil {
-				if errors.Is(err, io.EOF) {
-					close(messageChan)
-					return
-				}
-				fmt.Fprintf(os.Stderr, "Error reading stream: %v\n", err)
-				close(messageChan)
-				return
+	// 使用decoder解析服务端推送的SSE事件。
+	code := decoder.New(resp.Body)
+	for {
+		// 解码SSE事件，如果解码失败则根据错误类型处理。
+		event, err := code.Decode()
+		if err != nil {
+			if err == io.EOF {
+				// 如果遇到EOF错误，表示连接断开，正常结束函数。
+				return nil
 			}
-			// Remove trailing newline if present
-			if line[len(line)-1] == '\n' {
-				line = line[:len(line)-1]
-			}
-			// 只获取前锥 data: 前缀
-			if len(line) > 5 && line[:5] == "data:" {
-				// 解析json
-				var result Response
-				err = json.Unmarshal([]byte(line[5:]), &result)
-				if err != nil {
-					fmt.Fprintf(os.Stderr, "Error parsing JSON: %v\n", err)
-				}
-				if info != result.Output.Text {
-					messageChan <- result
-				}
-			}
+			// 其他错误直接返回。
+			return err
 		}
-	}()
-
-	return messageChan, nil
+		// 调用回调函数处理解码成功的事件，如果处理失败则返回错误。
+		if err := fn(event); err != nil {
+			return err
+		}
+	}
 }
 
 // 效验参数
