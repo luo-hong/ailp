@@ -6,7 +6,6 @@ require github.com/alevinval/sse v1.0.2
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
@@ -28,6 +27,7 @@ require (
 
 require (
 	github.com/baidubce/bce-sdk-go v0.9.184
+	github.com/gorilla/websocket v1.5.3
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/spf13/viper v1.19.0
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.952
