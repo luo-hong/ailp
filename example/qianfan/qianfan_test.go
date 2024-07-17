@@ -1,10 +1,11 @@
 package qianfan_test
 
 import (
-	"ailp/internal/channel/qianfan"
 	"context"
 	"fmt"
 	"testing"
+
+	"github.com/gin-gonic/gin/internal/channel/qianfan"
 )
 
 func TestRun(t *testing.T) {

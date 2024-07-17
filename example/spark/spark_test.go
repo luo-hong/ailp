@@ -1,12 +1,12 @@
 package spark_test
 
 import (
-	"ailp/internal/channel/spark"
 	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
 
+	"github.com/gin-gonic/gin/internal/channel/spark"
 	"github.com/gorilla/websocket"
 )
 

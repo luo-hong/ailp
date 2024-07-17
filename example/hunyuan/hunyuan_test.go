@@ -1,10 +1,10 @@
 package hunyuan_test
 
 import (
-	"ailp/internal/channel/hunyuan"
 	"fmt"
 	"testing"
 
+	"github.com/gin-gonic/gin/internal/channel/hunyuan"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"

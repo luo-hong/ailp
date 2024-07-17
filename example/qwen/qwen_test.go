@@ -1,12 +1,12 @@
 package qwen_test
 
 import (
-	"ailp/internal/channel/qwen"
 	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/alevinval/sse/pkg/base"
+	"github.com/gin-gonic/gin/internal/channel/qwen"
 )
 
 func TestRun(t *testing.T) {
