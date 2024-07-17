@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/luo-hong/ailp/internal/channel/spark"
+	"github.com/luo-hong/ailp/channel/spark"
 )
 
 func TestRun(t *testing.T) {

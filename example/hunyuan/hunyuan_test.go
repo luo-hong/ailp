@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/luo-hong/ailp/internal/channel/hunyuan"
+	"github.com/luo-hong/ailp/channel/hunyuan"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
+
 )
 
 func TestRun(t *testing.T) {
