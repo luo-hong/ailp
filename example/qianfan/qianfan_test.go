@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/gin-gonic/gin/internal/channel/qianfan"
+	"github.com/luo-hong/ailp/internal/channel/qianfan"
 )
 
 func TestRun(t *testing.T) {

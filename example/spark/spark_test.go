@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gin-gonic/gin/internal/channel/spark"
 	"github.com/gorilla/websocket"
+	"github.com/luo-hong/ailp/internal/channel/spark"
 )
 
 func TestRun(t *testing.T) {

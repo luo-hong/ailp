@@ -6,7 +6,8 @@ import (
 	"testing"
 
 	"github.com/alevinval/sse/pkg/base"
-	"github.com/gin-gonic/gin/internal/channel/qwen"
+	"github.com/luo-hong/ailp/internal/channel/qwen"
+
 )
 
 func TestRun(t *testing.T) {

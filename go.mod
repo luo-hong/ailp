@@ -1,4 +1,4 @@
-module github.com/gin-gonic/gin
+module github.com/luo-hong/ailp
 
 go 1.21.3
 
